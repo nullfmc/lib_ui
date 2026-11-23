@@ -318,11 +318,12 @@ struct Metrics {
 	} else if (overriden) {
 		font.setFamily(family);
 	} else {
-		font.setFamily("Open Sans"_q);
+		font.setFamily("Google Sans"_q);
 	}
 	font.setPixelSize(size);
 
-	const auto adjust = (overriden || system);
+	// nanoGram: layouts are made for Open Sans, so fit Google Sans to it
+	const auto adjust = !monospace;
 	const auto metrics = ComputeMetrics(font, adjust);
 
 	if (monospace || !(flags & FontFlag::SubOrSuper)) {
@@ -391,6 +392,14 @@ void StartFonts() {
 	}
 
 	QFont::insertSubstitution(name, u"Vazirmatn UI NL"_q);
+	QFont::insertSubstitutions(u"Google Sans"_q, {
+		name,
+		u"Vazirmatn UI NL"_q,
+#ifdef Q_OS_WIN
+		u"Ebrima"_q,
+		u"Nirmala UI"_q,
+#endif // Q_OS_WIN
+	});
 
 #ifdef Q_OS_WIN
 	QFont::insertSubstitutions(name, {

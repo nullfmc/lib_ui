@@ -167,7 +167,19 @@ void SideBarButton::paintEvent(QPaintEvent *e) {
 	const auto clip = e->rect();
 
 	const auto &bg = _active ? _st.textBgActive : _st.textBg;
-	p.fillRect(clip, bg);
+	p.fillRect(clip, _st.textBg);
+	if (_active) {
+		// nanoGram: Material navigation rail indicator
+		auto hq = PainterHighQualityEnabler(p);
+		const auto skip = style::ConvertScale(5);
+		const auto radius = style::ConvertScale(16);
+		p.setPen(Qt::NoPen);
+		p.setBrush(bg);
+		p.drawRoundedRect(
+			rect().adjusted(skip, skip / 2, -skip, -skip / 2),
+			radius,
+			radius);
+	}
 
 	RippleButton::paintRipple(p, 0, 0);
 
